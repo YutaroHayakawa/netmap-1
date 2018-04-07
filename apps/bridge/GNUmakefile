@@ -32,10 +32,14 @@ install: $(PROGS:%=install-%)
 install-%:
 	install -D $* $(DESTDIR)/$(PREFIX)/bin/$*
 
-bridge-b: bridge-b.o
+bridge: bridge.o
+bridge.o: bridge.c
+	$(CC) $(CFLAGS) -c $^ -o $@
 
+bridge-b: bridge-b.o
 bridge-b.o: bridge.c
 	$(CC) $(CFLAGS) -DBUSYWAIT -c $^ -o $@
+
 bridge-p: bridge-p.o
 bridge-p.o: bridge.c
 	$(CC) $(CFLAGS) -DPB -c $^ -o $@
