@@ -477,7 +477,12 @@ struct nm_generic_qdisc {
 };
 
 static int
-generic_qdisc_init(struct Qdisc *qdisc, struct nlattr *opt)
+generic_qdisc_init(struct Qdisc *qdisc, struct nlattr *opt
+#ifdef NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK
+    , struct netlink_ext_ack *extack)
+#else
+    )
+#endif
 {
 	struct nm_generic_qdisc *priv = NULL;
 
@@ -617,10 +622,17 @@ nm_os_catch_qdisc(struct netmap_generic_adapter *gna, int intercept)
 			 * attribute. */
 			nqdisc = qdisc_create_dflt(
 #ifndef NETMAP_LINUX_QDISC_CREATE_DFLT_3ARGS
+#ifndef NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK
 					ifp,
+#endif  /* NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK */
 #endif  /* NETMAP_LINUX_QDISC_CREATE_DFLT_3ARGS */
 					txq, &generic_qdisc_ops,
-					TC_H_UNSPEC);
+          TC_H_UNSPEC
+#ifdef NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK
+          , NULL);
+#else
+          );
+#endif  /* NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK */
 			if (!nqdisc) {
 				D("Failed to create qdisc");
 				goto qdisc_create;
@@ -630,7 +642,11 @@ nm_os_catch_qdisc(struct netmap_generic_adapter *gna, int intercept)
 			/* Call the change() op passing a valid netlink
 			 * attribute. This is used to set the queue idx. */
 			qdiscopt->qidx = i;
+#ifdef NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK
+      err = nqdisc->ops->change(nqdisc, nla, NULL);
+#else
 			err = nqdisc->ops->change(nqdisc, nla);
+#endif  /* NETMAP_LINUX_QDISC_CREATE_DFLT_WITH_NETLINK_EXT_ACK */
 			if (err) {
 				D("Failed to init qdisc");
 				goto qdisc_create;
