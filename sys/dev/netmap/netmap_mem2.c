@@ -443,7 +443,7 @@ struct netmap_mem_d nm_mem = {	/* Our memory allocator. */
 			.objminsize = sizeof(struct netmap_ring),
 			.objmaxsize = 32*PAGE_SIZE,
 			.nummin     = 2,
-			.nummax	    = 8512,
+			.nummax	    = 16384,
 		},
 		[NETMAP_BUF_POOL] = {
 			.name	= "netmap_buf",
