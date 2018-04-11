@@ -1402,10 +1402,10 @@ netmap_bdg_config(struct nmreq *nmr)
 	}
 	NMG_UNLOCK();
 	/* Don't call config() with NMG_LOCK() held */
-	BDG_RLOCK(b);
+	BDG_WLOCK(b);
 	if (b->bdg_ops.config != NULL)
 		error = b->bdg_ops.config((struct nm_ifreq *)nmr);
-	BDG_RUNLOCK(b);
+	BDG_WUNLOCK(b);
 	return error;
 }
 
