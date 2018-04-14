@@ -1814,7 +1814,9 @@ nm_bdg_flush(struct nm_bdg_fwd *ft, u_int n, struct netmap_vp_adapter *na,
 		struct nm_bdg_q *d;
 
 		if (!(ft[i].ft_flags & FT_SLOT)) {
-			RD(1, "%s no slot, disabling zero copy", b->bdg_basename);
+      if (netmap_verbose) {
+        RD(1, "%s no slot, disabling zero copy", b->bdg_basename);
+      }
 			zerocopy = 0;
 		}
 		ND("slot %d frags %d", i, ft[i].ft_frags);
@@ -1828,7 +1830,9 @@ nm_bdg_flush(struct nm_bdg_fwd *ft, u_int n, struct netmap_vp_adapter *na,
 		if (dst_port >= NM_BDG_NOPORT)
 			continue; /* this packet is identified to be dropped */
 		else if (dst_port == NM_BDG_BROADCAST) {
-			RD(1, "%s broadcast, disabling zero copy", b->bdg_basename);
+      if (netmap_verbose) {
+			  RD(1, "%s broadcast, disabling zero copy", b->bdg_basename);
+      }
 			zerocopy = 0;
 			dst_ring = 0; /* broadcasts always go to ring 0 */
 		}
@@ -1901,7 +1905,9 @@ nm_bdg_flush(struct nm_bdg_fwd *ft, u_int n, struct netmap_vp_adapter *na,
 		if (dst_na->up.na_flags & NAF_SW_ONLY)
 			goto cleanup;
 		if (dst_na->up.nm_mem != na->up.nm_mem) {
-			RD(1, "%s different allocator, disabling zero copy", b->bdg_basename);
+      if (netmap_verbose) {
+        RD(1, "%s different allocator, disabling zero copy", b->bdg_basename);
+      }
 			zerocopy = 0;
 		}
 		/*
