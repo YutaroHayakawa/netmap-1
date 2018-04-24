@@ -1,4 +1,4 @@
-PROGS	=  mac-pkt-gen
+PROGS	=  mac-pkt-gen mac-pkt-gen-b
 LIBNETMAP =
 
 CLEANFILES = $(PROGS) *.o
@@ -38,3 +38,6 @@ install-%:
 
 mac-pkt-gen: mac-pkt-gen.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+
+mac-pkt-gen-b: mac-pkt-gen.c
+	$(CC) $(CFLAGS) -DBUSYWAIT -o $@ $^ $(LDLIBS)
