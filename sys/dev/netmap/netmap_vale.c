@@ -1994,8 +1994,9 @@ retry:
 		}
 		my_start = j = kring->nkr_hwlease;
 		howmany = nm_kr_space(kring, 1);
-		if (needed < howmany)
+		if (needed < howmany) {
 			howmany = needed;
+    }
 		lease_idx = nm_kr_lease(kring, howmany, 1);
 		mtx_unlock(&kring->q_lock);
 
@@ -2059,7 +2060,6 @@ retry:
 						*ss = tmp;
 						slot->flags |= NS_BUF_CHANGED;
 						ss->flags |= NS_BUF_CHANGED;
-						RD(1, "%s zero copy", b->bdg_basename);
 					}
 					else if (ft_p->ft_flags & NS_INDIRECT) {
 						if (copyin(src, dst, copy_len)) {

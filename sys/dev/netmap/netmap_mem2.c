@@ -436,21 +436,21 @@ struct netmap_mem_d nm_mem = {	/* Our memory allocator. */
 			.objminsize = sizeof(struct netmap_if),
 			.objmaxsize = 4096,
 			.nummin     = 10,	/* don't be stingy */
-			.nummax	    = 10000,	/* XXX very large */
+			.nummax	    = 40000,	/* XXX very large */
 		},
 		[NETMAP_RING_POOL] = {
 			.name 	= "netmap_ring",
 			.objminsize = sizeof(struct netmap_ring),
 			.objmaxsize = 32*PAGE_SIZE,
 			.nummin     = 2,
-			.nummax	    = 16384,
+			.nummax	    = 65536,
 		},
 		[NETMAP_BUF_POOL] = {
 			.name	= "netmap_buf",
 			.objminsize = 64,
 			.objmaxsize = 65536,
 			.nummin     = 4,
-			.nummax	    = 3280000, /* one million! */
+			.nummax	    = 13121024, /* one million! */
 		},
 	},
 
